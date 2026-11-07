@@ -1,0 +1,9 @@
+import { Eye, FilePlus2, Search } from 'lucide-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { loadHistory } from '../features/investigationSlice'
+import StatusBadge from '../components/StatusBadge'
+import Loading from '../components/Loading'
+
+export default function History(){const {history,loading}=useSelector(s=>s.investigation),dispatch=useDispatch(),[query,setQuery]=useState(''); useEffect(()=>{dispatch(loadHistory())},[dispatch]); const filtered=history.filter(x=>JSON.stringify(x).toLowerCase().includes(query.toLowerCase()));return <div className="page"><section className="history-head"><div><span className="eyebrow">INVESTIGATION HISTORY</span><h2>Saved RCA records</h2><p>Investigations persist in the database and can be reopened for review.</p></div><Link to="/new" className="btn primary"><FilePlus2 size={16}/> New RCA</Link></section><section className="panel"><label className="search"><Search size={17}/><input placeholder="Search investigation, product, batch, or department" value={query} onChange={e=>setQuery(e.target.value)}/></label>{loading?<Loading/>:<table><thead><tr><th>Record</th><th>Product</th><th>Department</th><th>Method</th><th>Status</th><th>Updated</th><th/></tr></thead><tbody>{filtered.map(item=><tr key={item.id}><td><b>{item.investigation_number}</b><small>{item.title}</small></td><td>{item.product_name || '—'}<small>{item.batch_number || '—'}</small></td><td>{item.department || '—'}</td><td>{item.method === 'fishbone' ? 'Fishbone' : 'Five Whys'}</td><td><StatusBadge status={item.status}/></td><td>{new Date(item.updated_at).toLocaleDateString()}</td><td><Link className="icon-btn" title="Open investigation" to={`/history/${item.id}`}><Eye size={17}/></Link></td></tr>)}{!filtered.length&&<tr><td colSpan="7"><div className="empty-state">No investigations found.</div></td></tr>}</tbody></table>}</section></div>}

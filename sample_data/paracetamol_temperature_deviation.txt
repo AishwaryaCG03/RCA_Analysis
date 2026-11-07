@@ -1,0 +1,8 @@
+Deviation ID: DEV-2026-102
+Product: Paracetamol API
+Batch Number: BATCH-102
+Department: Manufacturing
+Process Stage: Reaction vessel temperature control
+Incident Date: 2026-10-14
+
+During the manufacturing process, reactor temperature reached 75°C while the specified operating temperature was 60°C. The observed deviation exceeded the specified operating limit by 15°C. The operator reported the deviation to the Quality Department and production was placed on hold pending assessment. The incident report does not include equipment maintenance records, cooling-system operating logs, or temperature-sensor calibration records.

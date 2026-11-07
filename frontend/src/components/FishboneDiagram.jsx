@@ -1,0 +1,11 @@
+import { Background, Controls, Handle, Position, ReactFlow } from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
+
+const colors = { Man:'#5d8f95', Machine:'#1f5274', Method:'#6b8e6f', Material:'#836897', Measurement:'#be7b48', Environment:'#4f7890' }
+export default function FishboneDiagram({ categories = [] }) {
+  if (!categories.length) return <div className="empty-state">Choose <b>Fishbone</b> and run analysis to map contributing-factor hypotheses.</div>
+  const nodes = [{ id:'effect', position:{x:680,y:212}, data:{label:'Observed\ndeviation'}, style:{background:'#123655',color:'#fff',border:'none',borderRadius:12,width:145,textAlign:'center',fontWeight:700,padding:13} }]
+  const edges = []
+  categories.forEach((category, i) => { const y = i < 3 ? 20 + i*130 : 410 + (i-3)*130; const x = i < 3 ? 70 + i*190 : 70+(i-3)*190; nodes.push({id:category.category,position:{x,y},data:{label:<div><strong>{category.category}</strong><small>{category.factors.length} factors</small></div>},style:{background:'#fff',border:`2px solid ${colors[category.category]}`,borderRadius:10,width:145,padding:9,color:'#17324a'}}); edges.push({id:`e-${category.category}`,source:category.category,target:'effect',type:'smoothstep',animated:false,style:{stroke:colors[category.category],strokeWidth:2}}) })
+  return <section className="panel fishbone-panel"><div className="section-title"><div><span className="step">02B</span><h2>Fishbone analysis</h2><p>Selectable category nodes map candidate contributing factors.</p></div></div><div className="fishbone-canvas"><ReactFlow nodes={nodes} edges={edges} fitView nodesDraggable={false} nodesConnectable={false} elementsSelectable><Background color="#dbe6ec" gap={20}/><Controls showInteractive={false}/></ReactFlow></div><div className="factor-grid">{categories.map(category => <article className="factor-card" key={category.category}><h3 style={{color:colors[category.category]}}>{category.category}</h3>{category.factors.length ? category.factors.map(f => <div className="factor" key={f.id}><strong>{f.factor}</strong><p>{f.rationale}</p>{f.missing_information.map(x => <span className="missing" key={x}>Needs: {x}</span>)}</div>) : <p className="muted">No relevant candidate factor suggested.</p>}</article>)}</div></section>
+}
